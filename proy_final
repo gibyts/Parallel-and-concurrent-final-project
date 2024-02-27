@@ -1,0 +1,139 @@
+import numpy as np
+import matriz_traspuesta as modulo_mt
+import matriz_suma as modulo_sm
+import matriz_factor as modulo_fc
+import gauss_jordan as modulo_gj
+import matriz_multiplication as modulo_mx
+import time
+
+def generate_random_matrix(rows, cols):
+    return np.random.randint(1, 101, size=(rows, cols))
+
+def comparar_resultadosInversa(tiempo_secuencial, tiempo_paralelo, num_hilos):
+    print("\n\t\t\tResultados:\n")
+    print(f"Tiempo de cálculo  secuencial: {tiempo_secuencial:.2f} segundos")
+    print(f"Tiempo de cálculo paralela: {tiempo_paralelo:.2f} segundos")
+    aceleracion = tiempo_secuencial / tiempo_paralelo
+    print(f"\n   speedup: {aceleracion:.4f}")
+    eficiencia = (aceleracion / num_hilos) * 100
+    print(f"efficiency: {eficiencia:.4f}%")
+
+def mostrarMatriz1(matrix):
+    print("Matriz original 1: ")
+    print(np.array(matrix))
+
+def mostrarMatriz2(matrix):
+    print("Matriz original 2: ")
+    print(np.array(matrix))
+
+
+
+if __name__ == "__main__":
+
+    while True:
+        matrix1 = generate_random_matrix(1000, 1000)
+        matrix2 = generate_random_matrix(1000, 1000)
+        print("\nOPCIONES:")
+        print("1. Suma: ")
+        print("2. Multiplicacion por factor: ")
+        print("3. Multiplicacion")
+        print("4. traspuesta")
+        print("5. inversa")
+        print("6. Terminar")
+        print("")
+        option = input("Opción: ")
+
+        if option == "1":
+            # suma
+            mostrarMatriz1(matrix1)
+            mostrarMatriz2(matrix2)
+            #secuencial
+            tiempo_inicio = time.time()
+            resultado_secuencial = modulo_sm.add_matrices_sequential(matrix1, matrix2)
+            tiempo_fin = time.time()
+            tiempo_secuencial = tiempo_fin - tiempo_inicio
+            #paralela
+            tiempo_inicio = time.time()
+            resultado_paralelo, num_hilos = modulo_sm.add_matrices_parallel(matrix1, matrix2)
+            tiempo_fin = time.time()
+            tiempo_paralelo = tiempo_fin - tiempo_inicio
+            #mostrar
+            print("Suma de forma secuencial:\n", resultado_secuencial)
+            print("Suma de forma paralela:\n", resultado_paralelo)
+            comparar_resultadosInversa(tiempo_secuencial, tiempo_paralelo, num_hilos)      
+        
+        elif option == "2":
+            # multiplicacion x factor
+            mostrarMatriz1(matrix1)
+            #secuencial
+            scalar = int(input("Ingrese el factor a multiplicar: "))
+            tiempo_inicio = time.time()
+            resultado_secuencial = modulo_fc.multiply_matrix_scalar_sequential(matrix1, scalar)
+            tiempo_fin = time.time()
+            tiempo_secuencial = tiempo_fin - tiempo_inicio
+            #paralela
+            tiempo_inicio = time.time()
+            resultado_paralelo, num_hilos = modulo_fc.multiply_matrix_scalar_parallel(matrix1, scalar)
+            tiempo_fin = time.time()
+            tiempo_paralelo = tiempo_fin - tiempo_inicio
+            #mostrar
+            print("Multiplicacion por factor de forma secuencial:\n", resultado_secuencial)
+            print("Multiplicacion por factor de forma paralela:\n", resultado_paralelo)
+            comparar_resultadosInversa(tiempo_secuencial, tiempo_paralelo, num_hilos)   
+        elif option == "3":
+            # multiplication
+            mostrarMatriz1(matrix1)
+            mostrarMatriz2(matrix2)
+            #secuencial
+            tiempo_inicio = time.time()
+            resultado_secuencial = modulo_mx.multiply_matrices_sequential(matrix1, matrix2)
+            tiempo_fin = time.time()
+            tiempo_secuencial = tiempo_fin - tiempo_inicio
+            #paralela
+            tiempo_inicio = time.time()
+            resultado_paralelo, num_hilos = modulo_mx.multiply_matrices_parallel(matrix1, matrix2)
+            tiempo_fin = time.time()
+            tiempo_paralelo = tiempo_fin - tiempo_inicio
+            #mostrar
+            print("Multiplicacion de forma secuencial:\n", resultado_secuencial)
+            print("Multiplicacion de forma paralela:\n", resultado_paralelo)
+            comparar_resultadosInversa(tiempo_secuencial, tiempo_paralelo, num_hilos) 
+        elif option == "4":
+            # traspuesta
+            mostrarMatriz1(matrix1)
+            #secuencial
+            tiempo_inicio = time.time()
+            resultado_secuencial = modulo_mt.calcular_transpuesta_secuencial(matrix1)
+            tiempo_fin = time.time()
+            tiempo_secuencial = tiempo_fin - tiempo_inicio
+            #paralela
+            tiempo_inicio = time.time()
+            resultado_paralelo, num_hilos = modulo_mt.calcular_traspuesta_paralela(matrix1)
+            tiempo_fin = time.time()
+            tiempo_paralelo = tiempo_fin - tiempo_inicio
+            #mostrar
+            print("Matriz traspuesta de forma secuencial:\n", resultado_secuencial)
+            print("Matriz traspuesta de forma paralela:\n", resultado_paralelo)
+            comparar_resultadosInversa(tiempo_secuencial, tiempo_paralelo, num_hilos)          
+        elif option == "5":
+            # inversa
+            mostrarMatriz1(matrix1)
+            #secuencial
+            tiempo_inicio = time.time()
+            resultado_secuencial = modulo_gj.calculate_inverse_sequential(matrix1)
+            tiempo_fin = time.time()
+            tiempo_secuencial = tiempo_fin - tiempo_inicio
+            #paralela
+            tiempo_inicio = time.time()
+            resultado_paralelo, num_hilos = modulo_gj.calculate_inverse_parallel(matrix1)  # Adjust number of threads as needed
+            tiempo_fin = time.time()
+            tiempo_paralelo = tiempo_fin - tiempo_inicio
+            #mostrar
+            print("Inversa de la matriz de forma secuencial:\n", resultado_secuencial)
+            print("Inversa de la matriz de forma paralela:\n", resultado_paralelo)
+            comparar_resultadosInversa(tiempo_secuencial, tiempo_paralelo, num_hilos)
+        elif option == "6":
+            print("Terminar")
+            break
+        else:
+            print("Opción no válida. Por favor, seleccione una opción válida.")
