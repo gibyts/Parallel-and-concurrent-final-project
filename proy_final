@@ -31,8 +31,9 @@ def mostrarMatriz2(matrix):
 if __name__ == "__main__":
 
     while True:
-        matrix1 = generate_random_matrix(1000, 1000)
-        matrix2 = generate_random_matrix(1000, 1000)
+        num = int(input("ingresa tamaño de la matriz: "))
+        matrix1 = generate_random_matrix(num, num)
+        matrix2 = generate_random_matrix(num, num)
         print("\nOPCIONES:")
         print("1. Suma: ")
         print("2. Multiplicacion por factor: ")
